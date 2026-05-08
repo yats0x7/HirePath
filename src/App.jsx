@@ -80,31 +80,10 @@ export default function App() {
       <main className="main-content">
         {activeTab === 'add' ? (
           <JobForm onAddJob={addJob} />
-        ) : jobs.length === 0 ? (
-          <div className="no-jobs-message">
-            <h2>No jobs added yet!</h2>
-            <p>Click on "Add Job" to start tracking your applications.</p>
-          </div>
         ) : (
           <div className="view-container">
-            {activeTab === 'kanban' && (
-              <div className="jobs-list">
-                <h2>All Applications</h2>
-                <div className="jobs-grid">
-                  {jobs.map(job => (
-                    <JobCard 
-                      key={job.id} 
-                      job={job} 
-                      onDelete={deleteJob} 
-                      onStatusUpdate={updateJobStatus}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-            {activeTab === 'stats' && (
-              <StatsDashboard jobs={jobs} />
-            )}
+            {activeTab === 'kanban' && <KanbanBoard jobs={jobs} />}
+            {activeTab === 'stats' && <StatsDashboard jobs={jobs} />}
           </div>
         )}
       </main>
