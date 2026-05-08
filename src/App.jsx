@@ -6,8 +6,6 @@ import KanbanBoard from './components/KanbanBoard'
 import StatsDashboard from './components/StatsDashboard'
 
 export default function App() {
-  // State to store job applications
-  // Each job will have: id, company, role, status, interviewDate, appliedDate
   const [jobs, setJobs] = useState([])
   const [activeTab, setActiveTab] = useState('kanban')
 
@@ -36,8 +34,26 @@ export default function App() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <h1>📋 Job Application Tracker</h1>
-        <p className="subtitle">Keep track of all your job applications in one place</p>
+        <div className="header-content">
+          <div className="header-title">
+            <h1> Job Application Tracker</h1>
+            <p className="subtitle">Keep track of all your job applications in one place</p>
+          </div>
+          <div className="header-stats">
+            <div className="stat-badge">
+              <span className="stat-value">{jobs.length}</span>
+              <span className="stat-label">Total Applied</span>
+            </div>
+            {jobs.length > 0 && (
+              <div className="stat-badge">
+                <span className="stat-value">
+                  {jobs.filter(j => j.status === 'Interviewed' || j.status === 'Offer').length}
+                </span>
+                <span className="stat-label">Interviews+</span>
+              </div>
+            )}
+          </div>
+        </div>
       </header>
 
       <nav className="nav-tabs">
@@ -45,19 +61,19 @@ export default function App() {
           className={`tab-btn ${activeTab === 'kanban' ? 'active' : ''}`}
           onClick={() => setActiveTab('kanban')}
         >
-          📊 Kanban Board
+          Application Board
         </button>
         <button 
           className={`tab-btn ${activeTab === 'stats' ? 'active' : ''}`}
           onClick={() => setActiveTab('stats')}
         >
-          📈 Statistics
+         Statistics
         </button>
         <button 
           className={`tab-btn ${activeTab === 'add' ? 'active' : ''}`}
           onClick={() => setActiveTab('add')}
         >
-          ➕ Add Job
+          Add Job
         </button>
       </nav>
 
@@ -80,6 +96,7 @@ export default function App() {
                       key={job.id} 
                       job={job} 
                       onDelete={deleteJob} 
+                      onStatusUpdate={updateJobStatus}
                     />
                   ))}
                 </div>
