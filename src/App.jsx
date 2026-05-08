@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import JobForm from './components/JobForm'
+import JobCard from './components/JobCard'
 import KanbanBoard from './components/KanbanBoard'
 import StatsDashboard from './components/StatsDashboard'
 
@@ -61,28 +62,33 @@ export default function App() {
       </nav>
 
       <main className="main-content">
-        {jobs.length === 0 ? (
+        {activeTab === 'add' ? (
+          <JobForm onAddJob={addJob} />
+        ) : jobs.length === 0 ? (
           <div className="no-jobs-message">
             <h2>No jobs added yet!</h2>
             <p>Click on "Add Job" to start tracking your applications.</p>
           </div>
         ) : (
-          <>
+          <div className="view-container">
             {activeTab === 'kanban' && (
-              <KanbanBoard 
-                jobs={jobs} 
-                onStatusChange={updateJobStatus}
-                onDelete={deleteJob}
-              />
+              <div className="jobs-list">
+                <h2>All Applications</h2>
+                <div className="jobs-grid">
+                  {jobs.map(job => (
+                    <JobCard 
+                      key={job.id} 
+                      job={job} 
+                      onDelete={deleteJob} 
+                    />
+                  ))}
+                </div>
+              </div>
             )}
             {activeTab === 'stats' && (
               <StatsDashboard jobs={jobs} />
             )}
-          </>
-        )}
-        
-        {activeTab === 'add' && (
-          <JobForm onAddJob={addJob} />
+          </div>
         )}
       </main>
     </div>
